@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">GADS2020 Leaderboard</string>
+    <string name="submit">Submit</string>
+    <string name="skilliq">Skill IQ</string>
+    <string name="hours">Hours</string>
+    <string name="submit_project">Submit Project</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="success">Submission Successful</string>
+    <string name="failed">Submission failed</string>
 </resources>
