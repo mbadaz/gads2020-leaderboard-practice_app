@@ -1,5 +1,6 @@
 package com.mambure.myapplication.data;
 
+import com.mambure.myapplication.data.remote.GoogleDocApi;
 import com.mambure.myapplication.models.Submission;
 
 import java.io.IOException;
@@ -30,6 +31,12 @@ public class PostSubmissionUseCase {
     private final ExecutorService executorService;
     private boolean isBusy;
 
+    /**
+     * The {@link Inject} annotation tells Hilt how to construct this object
+     * In this case Hilt will get the required dependency from
+     * {@link com.mambure.myapplication.dependencyinjection.GoogleApiModule}
+     * @param googleDocApi
+     */
     @Inject
     public PostSubmissionUseCase(GoogleDocApi googleDocApi) {
         this.googleDocApi = googleDocApi;

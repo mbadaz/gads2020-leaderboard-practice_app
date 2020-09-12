@@ -2,8 +2,8 @@ package com.mambure.myapplication.data;
 
 import android.util.Log;
 
+import com.mambure.myapplication.data.remote.LeaderboardApi;
 import com.mambure.myapplication.models.HourItem;
-import com.mambure.myapplication.data.remote.RemoteRepositoryApi;
 
 import java.io.IOException;
 import java.util.List;
@@ -28,14 +28,21 @@ public class FetchHoursLeaderboardUseCase {
     }
 
     private HourLeadersListener hourLeadersListener;
-    private final RemoteRepositoryApi remoteRepositoryApi;
+    private final LeaderboardApi leaderboardApi;
     private final ExecutorService executorService;
     private boolean isBusy;
 
     // Dependencies injected by Hilt
+
+    /**
+     * The {@link Inject} annotation tells Hilt how to construct this object
+     * In this case Hilt will get the required dependency from
+     * {@link com.mambure.myapplication.dependencyinjection.LeaderboardApiModule}
+     * @param leaderboardApi
+     */
     @Inject
-    public FetchHoursLeaderboardUseCase(RemoteRepositoryApi remoteRepositoryApi) {
-        this.remoteRepositoryApi = remoteRepositoryApi;
+    public FetchHoursLeaderboardUseCase(LeaderboardApi leaderboardApi) {
+        this.leaderboardApi = leaderboardApi;
         executorService = Executors.newSingleThreadExecutor();
     }
 
@@ -45,7 +52,7 @@ public class FetchHoursLeaderboardUseCase {
         isBusy = true;
         executorService.submit(() -> {
             try {
-                Response<List<HourItem>> response = remoteRepositoryApi.getHoursLeaderboard().execute();
+                Response<List<HourItem>> response = leaderboardApi.getHoursLeaderboard().execute();
                 processHourItemResponse(response);
             } catch (IOException e) {
                 Log.e(TAG, "Error fetching hours leaderboard data from network", e);

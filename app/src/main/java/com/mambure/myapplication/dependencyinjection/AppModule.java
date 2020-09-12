@@ -1,15 +1,5 @@
 package com.mambure.myapplication.dependencyinjection;
 
-import android.app.Application;
-
-import androidx.room.Room;
-import androidx.room.RoomDatabase;
-
-import com.mambure.myapplication.data.local.HourItemDao;
-import com.mambure.myapplication.data.local.LocalDatabase;
-import com.mambure.myapplication.data.local.SkillIqItemDao;
-import com.mambure.myapplication.data.remote.RemoteRepositoryApi;
-
 import java.util.concurrent.TimeUnit;
 
 import dagger.Module;
@@ -17,23 +7,34 @@ import dagger.Provides;
 import dagger.hilt.InstallIn;
 import dagger.hilt.android.components.ApplicationComponent;
 import okhttp3.OkHttpClient;
-import retrofit2.Retrofit;
-import retrofit2.converter.moshi.MoshiConverterFactory;
+
+/**
+ * This module provides the {@link OkHttpClient} to all components that
+ * declare that declare {@link OkHttpClient} as a dependency. In this case
+ * {@link GoogleApiModule#providesGoogleDocApi(OkHttpClient)} and
+ * {@link LeaderboardApiModule#providesRemoteRepositoryApi(OkHttpClient)}
+ * will be provided the {@link OkHttpClient} by this module
+ *
+ * The {@link InstallIn(ApplicationComponent)} annotation tells Hilt that
+ * that the dependencies provided by a module will have application scope
+ * and will provide the same instances of components for as long as
+ * the application is running. In this case the same instance of
+ * {@link OkHttpClient} will be provided to
+ * {@link GoogleApiModule#providesGoogleDocApi(OkHttpClient)} and
+ * {@link LeaderboardApiModule#providesRemoteRepositoryApi(OkHttpClient)}
+ */
 
 @Module
 @InstallIn(ApplicationComponent.class)
 public class AppModule {
 
-    @Provides
-    RemoteRepositoryApi providesRemoteRepositoryApi(OkHttpClient okHttpClient) {
-        return new Retrofit.Builder()
-                .baseUrl("https://gadsapi.herokuapp.com")
-                .client(okHttpClient)
-                .addConverterFactory(MoshiConverterFactory.create())
-                .build()
-                .create(RemoteRepositoryApi.class);
-    }
-
+    /**
+     * The {@link Provides} annotation declares that the method provides
+     * the component specified as the return type. In this case it declaring (to Hilt)
+     * that it provides the {@link OkHttpClient} and hilt will use it to cunstruct
+     * objects that declare it as a dependency
+     * @return
+     */
     @Provides
     OkHttpClient providesHttpClient() {
         return new OkHttpClient.Builder()
@@ -41,22 +42,4 @@ public class AppModule {
                 .connectTimeout(20, TimeUnit.SECONDS)
                 .build();
     }
-
-    @Provides
-    LocalDatabase providesLocalDatabase(Application application) {
-        return Room.databaseBuilder(application, LocalDatabase.class, LocalDatabase.class.getName().concat(".db"))
-                .fallbackToDestructiveMigration()
-                .build();
-    }
-
-    @Provides
-    SkillIqItemDao providesSkillItemDao(LocalDatabase localDatabase) {
-        return localDatabase.getSkillIqItemDao();
-    }
-
-    @Provides
-    HourItemDao providesHoursItemDao(LocalDatabase localDatabase) {
-        return localDatabase.getHourItemDao();
-    }
-
 }

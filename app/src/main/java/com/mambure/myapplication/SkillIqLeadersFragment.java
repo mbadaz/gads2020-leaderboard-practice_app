@@ -33,8 +33,11 @@ public class SkillIqLeadersFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Get the same viewmodel instance of the parent activity
         mainActivityViewModel = new ViewModelProvider(requireActivity())
                 .get(MainActivityViewModel.class);
+
         skillIQItemAdapter = new SkillIQItemAdapter();
     }
 

@@ -9,7 +9,7 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 
-public interface RemoteRepositoryApi {
+public interface LeaderboardApi {
     @GET("api/hours")
     Call<List<HourItem>> getHoursLeaderboard();
 

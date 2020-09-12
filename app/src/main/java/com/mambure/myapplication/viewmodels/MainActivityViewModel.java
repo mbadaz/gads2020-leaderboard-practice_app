@@ -13,6 +13,7 @@ import com.mambure.myapplication.data.FetchHoursLeaderboardUseCase;
 import com.mambure.myapplication.data.FetchHoursLeaderboardUseCase.HourLeadersListener;
 import com.mambure.myapplication.data.FetchSkillIQLeaderboardUseCase;
 import com.mambure.myapplication.data.FetchSkillIQLeaderboardUseCase.SkillIQListener;
+import com.mambure.myapplication.data.remote.LeaderboardApi;
 import com.mambure.myapplication.models.HourItem;
 import com.mambure.myapplication.models.SkillsIQItem;
 
@@ -20,6 +21,11 @@ import java.util.List;
 
 /***
  * Implement {@link LifecycleObserver} to observe lifecyle of its owner
+ * The Viewmodel is not even aware of {@link LeaderboardApi} and the {@link com.mambure.myapplication.data.remote.GoogleDocApi}
+ * because their implementation details are hidden inside {@link FetchHoursLeaderboardUseCase}
+ * and in {@link com.mambure.myapplication.data.PostSubmissionUseCase}
+ * In this way {@link MainActivityViewModel} acts as a mediator between the view
+ * ({@link com.mambure.myapplication.MainActivity} and the datasources.
  */
 public class MainActivityViewModel extends ViewModel implements LifecycleObserver {
 
@@ -37,6 +43,13 @@ public class MainActivityViewModel extends ViewModel implements LifecycleObserve
         this.fetchSkillIQLeaderboardUseCase = fetchSkillIQLeaderboardUseCase;
     }
 
+    /**
+     * Method will be called when the {@link LifecycleOwner} associated with this
+     * {@link LifecycleObserver} has entered the onResume state
+     * In this case the {@link LifecycleOwner} is {@link com.mambure.myapplication.MainActivity}
+     * and the {@link LifecycleObserver} is this viewmodel as it implements
+     * the {@link LifecycleObserver} interface
+     */
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void executeOnResume() {
         fetchHoursLeaderboardUseCase.setHourLeadersListener(hourLeadersListener);

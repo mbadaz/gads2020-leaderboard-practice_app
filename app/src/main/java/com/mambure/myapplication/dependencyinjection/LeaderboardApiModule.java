@@ -1,6 +1,6 @@
 package com.mambure.myapplication.dependencyinjection;
 
-import com.mambure.myapplication.data.remote.GoogleDocApi;
+import com.mambure.myapplication.data.remote.LeaderboardApi;
 
 import dagger.Module;
 import dagger.Provides;
@@ -11,21 +11,16 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.moshi.MoshiConverterFactory;
 
-/**
- * Modules installed in the {@link ActivityRetainedComponent} will
- * Will be scoped to the host Activity and will provide the same
- * instances of the dependencies for as long as the Activity lives
- */
 @Module
 @InstallIn(ActivityComponent.class)
-public abstract class GoogleApiModule {
-
+public abstract class LeaderboardApiModule {
     @Provides
-    static GoogleDocApi providesGoogleDocApi(OkHttpClient okHttpClient) {
+    static LeaderboardApi providesRemoteRepositoryApi(OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
-                .baseUrl("https://docs.google.com/forms/d/e/")
+                .baseUrl("https://gadsapi.herokuapp.com")
                 .client(okHttpClient)
                 .addConverterFactory(MoshiConverterFactory.create())
-                .build().create(GoogleDocApi.class);
+                .build()
+                .create(LeaderboardApi.class);
     }
 }

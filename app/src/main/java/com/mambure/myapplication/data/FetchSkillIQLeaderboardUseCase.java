@@ -3,7 +3,7 @@ package com.mambure.myapplication.data;
 import android.util.Log;
 
 import com.mambure.myapplication.models.SkillsIQItem;
-import com.mambure.myapplication.data.remote.RemoteRepositoryApi;
+import com.mambure.myapplication.data.remote.LeaderboardApi;
 
 import java.io.IOException;
 import java.util.List;
@@ -28,14 +28,14 @@ public class FetchSkillIQLeaderboardUseCase {
     }
 
     private SkillIQListener skillIQListener;
-    private final RemoteRepositoryApi remoteRepositoryApi;
+    private final LeaderboardApi leaderboardApi;
     private final ExecutorService executorService;
     private boolean isBusy;
 
     // Dependencies injected by Hilt
     @Inject
-    public FetchSkillIQLeaderboardUseCase(RemoteRepositoryApi remoteRepositoryApi) {
-        this.remoteRepositoryApi = remoteRepositoryApi;
+    public FetchSkillIQLeaderboardUseCase(LeaderboardApi leaderboardApi) {
+        this.leaderboardApi = leaderboardApi;
         executorService = Executors.newSingleThreadExecutor();
     }
 
@@ -44,7 +44,7 @@ public class FetchSkillIQLeaderboardUseCase {
 
         executorService.submit(() -> {
             try {
-                Response<List<SkillsIQItem>> response = remoteRepositoryApi.getSkillIqLeaderboard().execute();
+                Response<List<SkillsIQItem>> response = leaderboardApi.getSkillIqLeaderboard().execute();
                 processSkillIqResponse(response);
             } catch (IOException e) {
                 Log.e(TAG, "Error fetching skilliq leaderboard data from network", e);
