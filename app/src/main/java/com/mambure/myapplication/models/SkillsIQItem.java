@@ -1,24 +1,13 @@
 package com.mambure.myapplication.models;
 
 import androidx.annotation.Nullable;
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.Index;
-import androidx.room.PrimaryKey;
 
-@Entity(tableName = "SkillsIQItems", indices = {@Index(value = {"p_name", "p_country"},
-        unique = true)})
 public class SkillsIQItem {
-    @PrimaryKey(autoGenerate = true)
-    public int id;
-    @ColumnInfo(name = "p_name")
     private String name;
-    @ColumnInfo
     private int score;
-    @ColumnInfo(name = "p_country")
     private String country;
-    @ColumnInfo
     private String badgeUrl;
+
     public String getName() {
         return name;
     }

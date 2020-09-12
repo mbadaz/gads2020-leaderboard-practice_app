@@ -1,21 +1,11 @@
 package com.mambure.myapplication.models;
 
 import androidx.annotation.Nullable;
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
-@Entity(tableName = "HourItems")
 public class HourItem {
-    @PrimaryKey(autoGenerate = true)
-    public int id;
-    @ColumnInfo
     private String name;
-    @ColumnInfo
     private int hours;
-    @ColumnInfo
     private String country;
-    @ColumnInfo
     private String badgeUrl;
     public String getName() {
         return name;
